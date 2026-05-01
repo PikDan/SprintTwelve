@@ -42,15 +42,17 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.NAME_1 }}
-          password: ${{ secrets.NAME_2 }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract tag
         id: meta
-        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
+    
       - name: Build Docker image
-        run: docker build -t ${{ secrets.NAME_1 }}/go-app:${{ steps.meta.outputs.TAG }} .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/go-app:${{ steps.meta.outputs.TAG }} .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.NAME_1 }}/go-app:${{ steps.meta.outputs.TAG }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/go-app:${{ steps.meta.outputs.TAG }}
