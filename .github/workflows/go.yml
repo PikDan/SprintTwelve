@@ -1,18 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-
-  build:
-    runs-on: ubuntu-latestname: CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -21,6 +7,7 @@ on:
   pull_request:
 
 jobs:
+  #первый jobs
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -39,7 +26,7 @@ jobs:
 
       - name: Run tests
         run: go test ./... -v
-
+  #второu jobs
   publish:
     name: Build & Push Docker image
     runs-on: ubuntu-latest
@@ -65,16 +52,3 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ secrets.NAME_1 }}/go-app:${{ steps.meta.outputs.TAG }}
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
-
-    - name: Build
-      run: go build -v ./...
-
-    - name: Test
-      run: go test -v ./...
